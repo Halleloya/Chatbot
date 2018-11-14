@@ -10,5 +10,5 @@ https://s3.amazonaws.com/ccassign1/index.html
 
 Current Update: Assignment 2
 
-Technique Used: S3, API Gateway, Lambda, Cognito, Lex, SQS, SNS, DynamoDB, Cloudwatch， GoogleMap API
+Technique Used: S3, API Gateway, Lambda, Cognito, Lex, SQS, SNS, DynamoDB, Cloudwatch, GoogleMap API
 
