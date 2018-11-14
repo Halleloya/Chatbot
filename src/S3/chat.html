@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<link rel="shortcut icon" href="#" />
+		<meta name="viewport" content="width=device-width,height=device-height,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>ChatRobot</title>
+		<style type="text/css">
+			* {
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			body {
+				background-color: #e0e0e0;
+				font-family: "Times New Roman";
+			}
+			
+			.box {
+				margin: 50px auto;
+				width: 380px;
+				height: 700px;
+				border-radius: 25px;
+				background-color: #666;
+				color: #555;
+				box-shadow: 5px 5px 15px 5px rgba(102, 102, 102, 0.1);
+			}
+			
+			.head {
+				height: 50px;
+				color: #fff;
+				text-align: center;
+			}
+			
+			.body {
+				width: 380px;
+				height: 600px;
+				background-color: #ebebeb;
+				overflow-y: scroll;
+				overflow-x: hidden;
+			}
+			.body::-webkit-scrollbar{
+				width: 5px;
+			}
+			.body::-webkit-scrollbar-thumb{
+				background-color: #cecece;
+				border-radius: 3px;
+			}
+			.foot {
+				height: 50px;
+				margin: 0px 25px;
+				line-height: 50px;
+				color: #fff;
+				cursor: pointer;
+			}
+			
+			.xx {
+				display: none;
+				position: relative;
+				bottom: 170px;
+				background-color: #888;
+				color: #fff;
+			}
+			
+			.xx p {
+				height: 40px;
+				margin: 0 30px;
+				line-height: 40px;
+				cursor: pointer;
+				border-bottom: 1px solid #999;
+			}
+			
+			.c1 {
+				display: inline-block;
+				padding: 0px 10px;
+				background-color: #fff;
+				line-height: 40px;
+				border-radius: 0 10px 10px 10px;
+				box-shadow: 5px 5px 15px 0 rgba(102, 102, 102, 0.1);
+			}
+			
+			.c2 {
+				float: right;
+				display: inline-block;
+				padding: 0px 10px;
+				background-color: #fff;
+				line-height: 40px;
+				border-radius: 10px 0px 10px 10px;
+				box-shadow: 5px 5px 15px 0 rgba(102, 102, 102, 0.1);
+				background-color: #86DB49;
+			}
+			
+			.c {
+				width: 350px;
+				margin-bottom: 15px;
+				position: relative;
+				top: 15px;
+				left: 15px;
+				display: table;
+			}
+			/*.load{
+				display: inline-block;
+				padding:0px 10px;
+				background-color: #fff;
+				height: 40px;
+				border-radius: 0 10px 10px 10px;
+				box-shadow: 5px 5px 15px 0 rgba(102,102,102,0.1);
+			}
+			.load img{
+				margin: 4px 0px;
+			}*/
+			#chat{
+				width: 254px;
+				height: 35px;
+				border: 0px;
+				border-radius: 10px;
+				outline: none;
+				padding: 0 10px;
+				margin-right: 5px;
+			}
+			.fs{
+				width: 45px;
+				height: 35px;
+				color: #555;
+				border: 0px;
+				border-radius: 10px;
+				outline: none;
+			}
+		</style>
+		<script type="text/javascript" src="lib/axios/dist/axios.standalone.js"></script>
+		<script type="text/javascript" src="lib/CryptoJS/rollups/hmac-sha256.js"></script>
+		<script type="text/javascript" src="lib/CryptoJS/rollups/sha256.js"></script>
+		<script type="text/javascript" src="lib/CryptoJS/components/hmac.js"></script>
+		<script type="text/javascript" src="lib/CryptoJS/components/enc-base64.js"></script>
+		<script type="text/javascript" src="lib/url-template/url-template.js"></script>
+		<script type="text/javascript" src="lib/apiGatewayCore/sigV4Client.js"></script>
+		<script type="text/javascript" src="lib/apiGatewayCore/apiGatewayClient.js"></script>
+		<script type="text/javascript" src="lib/apiGatewayCore/simpleHttpClient.js"></script>
+		<script type="text/javascript" src="lib/apiGatewayCore/utils.js"></script>
+		<script type="text/javascript" src="apigClient.js"></script>
+	</head>
+
+	<body>
+		<div class="box">
+
+			<div class="head">
+				<p style="line-height: 40px;">ChatRobot</p>
+			</div>
+			<div class="body">
+				<div class="c5">
+					
+				</div>
+			</div>
+			<div class="foot">
+				<input type="text" name="" id="chat" value="" />
+				<button class="fs">SEND</button>
+			</div>
+			<div class="xx">
+				
+			</div>
+
+		</div>
+
+		<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+		<script>
+			var c1= '<div class="c">'+
+						'<div class="c1">This is a robot'+
+						'</div>'+
+						'</div>';
+			$('.c5').append(c1);
+			
+			$('.fs').click(function() {
+					ajax();
+					$('#chat').val('');
+			});
+			$(".foot").keydown(function() {
+		        if(event.keyCode == "13") {
+		            ajax();
+					$('#chat').val('');
+		        }
+		    })
+			
+			$('.foot').click(function() {
+				$('.xx').show();
+			});
+			$('.body').click(function() {
+				$('.xx').css('display', 'none');
+			});
+
+			var apigClient = apigClientFactory.newClient({
+					accessKey: 'XXXXXXXXXXXX',
+					secretKey: 'XXXXXXXX',
+					apiKey: 'XXXXXXXXXXXX'
+				});
+				
+			var outstr;
+			var flag = 1;
+			
+			function ajax(){
+				
+				var c=$('#chat').val();
+				var c2='<div class="c"><div class="c2">'+c+'</div></div>';
+				$('.c5').append(c2);
+				
+				//var info = $('#chat').val();
+				
+				//dost(c);
+				
+				var str = c;
+				//=apigClient.chatbotPost({"messages": str});
+				var params = {
+				};
+				
+				var body = {
+					"inputText": str
+				};
+				var additionalParams = {
+				  // If there are any unmodeled query parameters or headers that must be
+				  //   sent with the request, add them here.
+				  headers: {
+					'Content-Type': 'application/json'
+				  },
+				};
+				apigClient.chatbotPost (params, body, additionalParams)
+					.then(function(result){
+						console.log(result.data.message, typeof(result.data.message));
+						var tmp = result.data.message//JSON.parse(result);//.data.body);
+						//for (key in tmp)
+							//outstr = tmp[key];//This is where you would put a success callback
+						outstr = tmp;
+						//console.log('this is the result', (JSON.parse(result.data.message)).error);
+						//document.getElementById("out").value=outstr;
+						console.log("outstr", typeof(outstr), outstr)
+						var t= '<div class="c">'+
+						'<div class="c1">This is a robot'+
+						'</div>'+
+						'</div>';
+
+						var t= '<div class="c">'+
+						'<div class="c1">'+outstr+''+
+						'</div>'+
+						'</div>';
+						$('.c5').append(t);
+						
+						
+						var q= $('.c5').height();
+						var w= $('.body').height();
+						var e=q-w+30;
+						$('.body').scrollTop(e);
+							//return outstr;
+						}).catch( function(result){
+							console.log('this is an error', result); //This is where you would put an error callback
+						});
+
+			}
+
+			
+		</script>
+	<script>
+		var login_url =
+		"httXXXXXX9tnp1hfimd0sXXX://s3XXXXXdex.html";
+		$(document).ready(function () {
+			$('#signin').attr('href', login_url);
+		});
+	</script>
+	</body>
+
+</html>
