@@ -1,11 +1,13 @@
 # Chatbot
 
+[Note] If you are new to AWS, please be sure NOT to public any credential information (i.e. any kinds of KEY). Loathsome attackers could petencially abuse such information causing trenmendous lost in your account. 
+
 A chatbot deployed on Amazon AWS.
-Assignment for Cloud Computing. --lh2913
+Assignment for Cloud Computing and Big Data. --lh2913
 
 The project is deployed on AWS S3, with link below:
 https://s3.amazonaws.com/ccassign1/index.html
 
-Current Update: Assignment 1
+Current Update: Assignment 2
+Technique Used: S3, API Gateway, Lambda, Cognito, Lex, SQS, SNS, DynamoDB, Cloudwatch， GoogleMap API
 
-https://chatbot-hly.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=3abi9de5h5u3r56hlnqajbfhss&redirect_uri=https://s3.amazonaws.com/ccassign1/index.html
